@@ -77,7 +77,7 @@ fi
 if [[ "$1" == "--help" ]]; then
 	cat <<-END
 	Useage:
-	  ./fstools [Option] | [Arguments]
+	  ./fstools.sh [Option] | [Arguments]
 	
 	Possible Options:
 	  --version   Prints a short information about the version of this script.
@@ -100,7 +100,7 @@ if [[ "$1" == "--help" ]]; then
 	                e.g. "brightmaterials.csv"
 
 	  Coming together as:
-	    ./fstools "/path/to/input/folder/" "/path/to/output/folder/"
+	    ./fstools.sh "/path/to/input/folder/" "/path/to/output/folder/"
 	      "motherfile.asm" "brightmaterials.csv"
 	END
 	exit;

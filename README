@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 
 Useage:
-  ./fstools [Option] | [Arguments]
+  ./fstools.sh [Option] | [Arguments]
 
 Possible Options:
   --version   Prints a short information about the version of this script.
@@ -40,6 +40,6 @@ Optional Arguments:
                 e.g. "brightmaterials.csv"
 
   Coming together as:
-    ./fstools "/path/to/input/folder/" "/path/to/output/folder/"
+    ./fstools.sh "/path/to/input/folder/" "/path/to/output/folder/"
       "motherfile.asm" "brightmaterials.csv"
 
