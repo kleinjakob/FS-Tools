@@ -243,7 +243,11 @@ while [ $linenum -lt $maxnumlines ]; do
 		./createstatetemplate.sh "${tmpfolder}${subfile}_textures.txt" "${tmpfolder}${subfile}_statelabellist.txt" "$lightcode" > "${tmpfolder}${subfile}_statelabellist.csv"
 		
 		# Let user Edit Texture Table.
-		oocalc "${tmpfolder}${subfile}_statelabellist.csv"
+		if command oocalc &> /dev/null; then
+			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
+		else
+			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
+		fi
 		echo -e "Waiting until editing of file '${tmpfolder}${subfile}_statelabellist.csv' is completed!\nPlease press enter when ready to continue...";
 		read
 		
@@ -266,7 +270,11 @@ while [ $linenum -lt $maxnumlines ]; do
 		./createdefaultstatelist.sh "${tmpfolder}${subfile}_textures.txt" "${tmpfolder}${subfile}" "${submodel_basename}" > "${tmpfolder}${subfile}_statelabellist.csv"
 		
 		# Let user Edit Texture Table.
-		oocalc "${tmpfolder}${subfile}_statelabellist.csv"
+		if command oocalc &> /dev/null; then
+			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
+		else
+			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
+		fi
 		echo -e "Waiting until editing of file '${tmpfolder}${subfile}_statelabellist.csv' is completed!\nPlease press enter when ready to continue...";
 		read
 		
@@ -301,7 +309,7 @@ done < "${tmpfolder}submodels.txt"
 perl -pe 's/\n/\r\n/' < "${tmpfolder}${motherfile}" > "${outputfolder}${motherfile}"
 
 # Test if BGLC_9.exe is in current folder and wine is installed.
-if [[ -f BGLC_9.exe ]] && which wine &> /dev/null; then
+if [[ -f BGLC_9.exe ]] && command wine &> /dev/null; then
 	# Ask if we should compile.
 	echo "Should we start compilation for you now (Yn)?";
 	read answer;
