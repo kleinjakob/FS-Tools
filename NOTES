@@ -1,0 +1,38 @@
+1) ./readtexturelist.sh "inputfile_0.asm" > "texturelist.txt"
+
+2) ./controlcode.sh "used light string in lower case! (e.g. lpo)" "dict_lightState number" "submodel_basename" "statelabelslist.txt" > "controlcodetemplate.txt"
+    DONE! (TODO: Take Submodel Basename into account for statelabels (and state end label!))
+
+3) ./createstatetemplate.sh "texturelist.txt" "statelabelslist.txt" "used light string in lower case! (e.g. lpo)"> "statetable.csv"
+
+4) Edit Statetable in Tabular Calculation Program
+
+5) ./updatefromtemplate.sh "statetable.csv" "texturelist.txt" "controlcodetemplate.txt" > "controlcode.txt"
+
+6) cat "inputfile_0.asm" | sed -n '/BGL_BEGIN 0800h/r "control_new.txt" #(uncited!)
+//{:a;n;/_lights_done label word/{bb;};ba;};:b;p;' > "ouput_mod.asm"
+
+----
+
+notes:
+
+To find out format of input file:
+perl -e '(<STDIN> =~ /\r\n/) ? print "CRLF" : print "LF"; print "\n"' < "input.file"
+
+To translate from CRLF to LF:
+perl -pe 's/\r\n/\n/'
+
+and reverse:
+perl -pe 's/[^\r]*\n/\r\n/'
+
+to get lightstate number:
+perl -e 'while (<>) { if (/dict_(.*)_lightStates/) { print $1 . "\n"; exit 0; } } exit 1;' < "inputfile_mother.asm"
+
+to get submodel basename:
+perl -e 'while (<>) { if (/(.*)_top label BGLCODE/) { print $1 . "\n"; exit 0; } } exit 1;' < "inputfile_0.asm"
+
+to get submodel types
+perl -e 'my $type = undef; while (<>) { if (/LOD_.*L\s+label\s+BGLCODE/) { $type = "EXTERIOR" } if (/INSIDE_.*L\s+label\s+BGLCODE/) { $type = "INTERIOR" } if (/include\s*(.*\.asm)/) { print $1 . "\t" . $type . "\n"; } }' < /tmp/QW_RJ100_r477.asm
+
+make submodel paths relative
+perl -pe 's/include\s*.*([^\\\/]*\.asm)/include    $1/' < /tmp/QW_RJ100_r477.asm > /tmp/QW_RJ100_r477_rel.asm

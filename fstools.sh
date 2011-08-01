@@ -1,8 +1,29 @@
 #!/bin/bash
+#   FS Tools 1.0
+#   Copyright (C) 2009-2011 Jakob Klein, mail@kleinjakob.at
+#
+#   This file is part of FS Tools.
+#
+#   FS Tools is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   FS Tools is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+
+# Activate Die on Error
+set -e
 
 # $1 input folder
 # $2 output folder
 # $3 mother file
+# $4 brightmaterials file
 
 inputfolder="";
 outputfolder="";
@@ -10,13 +31,96 @@ motherfile="";
 brightmaterials="";
 tmpfolder="/tmp/";
 
+# Handle Default Options
+if [[ "$1" == "--version" ]]; then
+	cat <<-END
+	FS Tools 1.0
+	Copyright (C) 2009-2011 Jakob Klein
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+	END
+	exit;
+fi
+
+if [[ "$1" == "--licence" ]]; then
+	cat <<-END
+	FS Tools 1.0
+	Copyright (C) 2009-2011 Jakob Klein
+
+	END
+	cat gpl.txt;
+	exit;
+fi
+
+if [[ "$1" == "--help" ]]; then
+	cat <<-END
+	FS Tools 1.0
+	Copyright (C) 2009-2011 Jakob Klein
+	License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+	This is free software: you are free to change and redistribute it.
+	There is NO WARRANTY, to the extent permitted by law.
+
+	END
+	cat <<-END
+	Useage:
+	  ./fstools [Option] | [Arguments]
+	
+	Possible Options:
+	  --version   Prints a short information about the version of this script.
+	  --help      Prints this short text on invocation.
+	  --licence   Prints the Licence under which this program is released (GPL3).
+	
+	Optional Arguments:
+	  If you give arguments, you have to give all four, or none at all.
+	  By giving the arguments you skip the interactive qestionaire about the
+	  input and output folders, the mother input file and the bright materials
+	  table.
+	  
+	  Argument 1:   absolute input folder name ending in a trailing slash (/)
+	                e.g. "/path/to/input/folder/"
+	  Argument 2:   absolute output folder name ending in a trailing slash (/)
+	                e.g. "/path/to/output/folder/"
+	  Argument 3:   name of the mother file in the input folder
+	                e.g. "motherfile.asm"
+	  Argument 4:   name of the bright materials table file in the input folder
+	                e.g. "brightmaterials.csv"
+
+	  Coming together as:
+	    ./fstools "/path/to/input/folder/" "/path/to/output/folder/"
+	      "motherfile.asm" "brightmaterials.csv"
+	END
+	exit;
+fi
+
+# Print Copyright Notice
+cat <<-END
+FS Tools 1.0
+Copyright (C) 2009-2011 Jakob Klein
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+END
+
 if [[ ${#1} -gt 0 && ${#2} -gt 0 && ${#3} -gt 0 && ${#4} -gt 0 ]]; then
 	inputfolder="$1";
 	outputfolder="$2";
 	motherfile="$3";
 	brightmaterials="$4";
 else
-	echo -e "Hello!\n\nYou are running this script in interactive mode!\n";
+	echo -e "You are running this script in interactive mode!\n";
 	
 	echo "Please give the full path to the folder of the input files (terminating in /):";
 	read inputfolder;
@@ -204,27 +308,29 @@ done < "${tmpfolder}submodels.txt"
 
 perl -pe 's/\n/\r\n/' < "${tmpfolder}${motherfile}" > "${outputfolder}${motherfile}"
 
-# Ask if we should compile.
-echo "Should we start compilation for you now (Yn)?";
-read answer;
+# Test if BGLC_9.exe is in current folder and wine is installed.
+if [[ -f BGLC_9.exe ]] && which wine &> /dev/null; then
+	# Ask if we should compile.
+	echo "Should we start compilation for you now (Yn)?";
+	read answer;
 
-answer=`echo "$answer" | perl -e '$answer = <>; if ($answer =~ /^[nN0]/) { print 0; } else { print 1; }'`;
-## echo $answer;
+	answer=`echo "$answer" | perl -e '$answer = <>; if ($answer =~ /^[nN0]/) { print 0; } else { print 1; }'`;
+	## echo $answer;
 
-if [[ $answer -eq 1 ]]; then
-	startdir=`pwd`;
+	if [[ $answer -eq 1 ]]; then
+		startdir=`pwd`;
 
-	# Copy BGLC_9.exe into output dir as it has problems with absolute and non-zero-depth-realtive paths under linux!
-	cp BGLC_9.exe "${outputfolder}";
+		# Copy BGLC_9.exe into output dir as it has problems with absolute and non-zero-depth-realtive paths under linux!
+		cp BGLC_9.exe "${outputfolder}";
 	
-	cd "${outputfolder}";
-	chmod a+x BGLC_9.exe;
+		cd "${outputfolder}";
+		chmod a+x BGLC_9.exe;
 	
-	# Start compilation with MDL switch
-	wine BGLC_9.exe "/MDL" "${motherfile}"
+		# Start compilation with MDL switch
+		wine BGLC_9.exe "/MDL" "${motherfile}"
 	
-	rm BGLC_9.exe;
+		rm BGLC_9.exe;
 	
-	cd "${startdir}";
+		cd "${startdir}";
+	fi
 fi
-
