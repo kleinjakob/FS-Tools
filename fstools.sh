@@ -1,5 +1,5 @@
 #!/bin/bash
-#   FS Tools 1.0
+#   FS Tools
 #   Copyright (C) 2009-2011 Jakob Klein, mail@kleinjakob.at
 #
 #   This file is part of FS Tools.
@@ -25,6 +25,10 @@ set -e
 # $3 mother file
 # $4 brightmaterials file
 
+# Version String for GIT Tags (git tags are in format v1.005 while for
+# presentation the version should be formated 1.5)
+VERSION="1.0"
+
 inputfolder="";
 outputfolder="";
 motherfile="";
@@ -32,9 +36,10 @@ brightmaterials="";
 tmpfolder="/tmp/";
 
 # Handle Default Options
+# Version is printed without the default copyright notice!
 if [[ "$1" == "--version" ]]; then
+	echo "FS Tools ${VERSION}"
 	cat <<-END
-	FS Tools 1.0
 	Copyright (C) 2009-2011 Jakob Klein
 
 	This program is free software: you can redistribute it and/or modify
@@ -54,25 +59,22 @@ if [[ "$1" == "--version" ]]; then
 	exit;
 fi
 
-if [[ "$1" == "--licence" ]]; then
-	cat <<-END
-	FS Tools 1.0
-	Copyright (C) 2009-2011 Jakob Klein
+# Print Default Copyright Notice
+echo "FS Tools ${VERSION}"
+cat <<-END
+Copyright (C) 2009-2011 Jakob Klein
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
 
-	END
+END
+
+if [[ "$1" == "--licence" ]]; then
 	cat gpl.txt;
 	exit;
 fi
 
 if [[ "$1" == "--help" ]]; then
-	cat <<-END
-	FS Tools 1.0
-	Copyright (C) 2009-2011 Jakob Klein
-	License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-	This is free software: you are free to change and redistribute it.
-	There is NO WARRANTY, to the extent permitted by law.
-
-	END
 	cat <<-END
 	Useage:
 	  ./fstools [Option] | [Arguments]
@@ -103,16 +105,6 @@ if [[ "$1" == "--help" ]]; then
 	END
 	exit;
 fi
-
-# Print Copyright Notice
-cat <<-END
-FS Tools 1.0
-Copyright (C) 2009-2011 Jakob Klein
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-END
 
 if [[ ${#1} -gt 0 && ${#2} -gt 0 && ${#3} -gt 0 && ${#4} -gt 0 ]]; then
 	inputfolder="$1";

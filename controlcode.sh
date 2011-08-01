@@ -1,5 +1,5 @@
 #!/bin/bash
-#   FS Tools 1.0
+#   FS Tools
 #   Copyright (C) 2009-2011 Jakob Klein, mail@kleinjakob.at
 #
 #   This file is part of FS Tools.
