@@ -249,7 +249,7 @@ while [ $linenum -lt $maxnumlines ]; do
 		if which oocalc &> /dev/null; then
 			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
 		else
-			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
+			echo -e "Open Office Calc or Libre Office Calc not found!\nPlease edit the file '${tmpfolder}${subfile}_statelabellist.csv' by hand before continuing.";
 		fi
 		echo -e "Waiting until editing of file '${tmpfolder}${subfile}_statelabellist.csv' is completed!\nPlease press enter when ready to continue...";
 		read
@@ -276,7 +276,7 @@ while [ $linenum -lt $maxnumlines ]; do
 		if which oocalc &> /dev/null; then
 			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
 		else
-			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
+			echo -e "Open Office Calc or Libre Office Calc not found!\nPlease edit the file '${tmpfolder}${subfile}_statelabellist.csv' by hand before continuing.";
 		fi
 		echo -e "Waiting until editing of file '${tmpfolder}${subfile}_statelabellist.csv' is completed!\nPlease press enter when ready to continue...";
 		read
