@@ -27,7 +27,7 @@ set -e
 
 # Version String for GIT Tags (git tags are in format v1.005 while for
 # presentation the version should be formated 1.5)
-VERSION="1.1"
+VERSION="1.2"
 
 inputfolder="";
 outputfolder="";
@@ -102,6 +102,9 @@ if [[ "$1" == "--help" ]]; then
 	  Coming together as:
 	    ./fstools.sh "/path/to/input/folder/" "/path/to/output/folder/"
 	      "motherfile.asm" "brightmaterials.csv"
+	
+	For further information see the README included in the original package.
+	
 	END
 	exit;
 fi
@@ -243,7 +246,7 @@ while [ $linenum -lt $maxnumlines ]; do
 		./createstatetemplate.sh "${tmpfolder}${subfile}_textures.txt" "${tmpfolder}${subfile}_statelabellist.txt" "$lightcode" > "${tmpfolder}${subfile}_statelabellist.csv"
 		
 		# Let user Edit Texture Table.
-		if command oocalc &> /dev/null; then
+		if which oocalc &> /dev/null; then
 			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
 		else
 			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
@@ -270,7 +273,7 @@ while [ $linenum -lt $maxnumlines ]; do
 		./createdefaultstatelist.sh "${tmpfolder}${subfile}_textures.txt" "${tmpfolder}${subfile}" "${submodel_basename}" > "${tmpfolder}${subfile}_statelabellist.csv"
 		
 		# Let user Edit Texture Table.
-		if command oocalc &> /dev/null; then
+		if which oocalc &> /dev/null; then
 			oocalc "${tmpfolder}${subfile}_statelabellist.csv"
 		else
 			echo -e "Open Office Calc or Libre Office Calc not found!\n Please edit the file by hand before continuing.";
@@ -308,29 +311,36 @@ done < "${tmpfolder}submodels.txt"
 
 perl -pe 's/\n/\r\n/' < "${tmpfolder}${motherfile}" > "${outputfolder}${motherfile}"
 
-# Test if BGLC_9.exe is in current folder and wine is installed.
-if [[ -f BGLC_9.exe ]] && command wine &> /dev/null; then
-	# Ask if we should compile.
-	echo "Should we start compilation for you now (Yn)?";
-	read answer;
+# Test if wine is installed or we are under Windows (Cygwin) anyways.
+if which wine &> /dev/null || [[ `uname` == CYGWIN* ]]; then
+	# Test if BGLC_9.exe is in current folder.
+	if [[ -f BGLC_9.exe ]] ; then
+		# Ask if we should compile.
+		echo "Should we start compilation for you now (Yn)?";
+		read answer;
 
-	answer=`echo "$answer" | perl -e '$answer = <>; if ($answer =~ /^[nN0]/) { print 0; } else { print 1; }'`;
-	## echo $answer;
+		answer=`echo "$answer" | perl -e '$answer = <>; if ($answer =~ /^[nN0]/) { print 0; } else { print 1; }'`;
+		## echo $answer;
 
-	if [[ $answer -eq 1 ]]; then
-		startdir=`pwd`;
+		if [[ $answer -eq 1 ]]; then
+			startdir=`pwd`;
 
-		# Copy BGLC_9.exe into output dir as it has problems with absolute and non-zero-depth-realtive paths under linux!
-		cp BGLC_9.exe "${outputfolder}";
+			# Copy BGLC_9.exe into output dir as it has problems with absolute and non-zero-depth-realtive paths under linux!
+			cp BGLC_9.exe "${outputfolder}";
 	
-		cd "${outputfolder}";
-		chmod a+x BGLC_9.exe;
+			cd "${outputfolder}";
+			chmod a+x BGLC_9.exe;
 	
-		# Start compilation with MDL switch
-		wine BGLC_9.exe "/MDL" "${motherfile}"
+			# Start compilation with MDL switch depending if Linux or Cygwin
+			if which wine &> /dev/null; then
+				wine BGLC_9.exe "/MDL" "${motherfile}"
+			else
+				./BGLC_9.exe "/MDL" "${motherfile}"
+			fi
 	
-		rm BGLC_9.exe;
+			rm BGLC_9.exe;
 	
-		cd "${startdir}";
+			cd "${startdir}";
+		fi
 	fi
 fi
