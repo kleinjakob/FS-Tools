@@ -15,7 +15,7 @@
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+#   along with FS Tools.  If not, see <http://www.gnu.org/licenses/>.
 
 # Example usage: ./updatefromtemplate.sh FA_RJ100_WV_statetable_r001.csv FA_RJ100_WV_textures.txt FA_RJ100_WV_control.txt > FA_RJ100_WV_control_new.txt
 

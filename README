@@ -14,7 +14,42 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+along with FS Tools.  If not, see <http://www.gnu.org/licenses/>.
+
+Prerequisites:
+  A working FS9 toolchain for modeling and exporting models.  Usually
+  consiting of GMax, MDL Commander, MakeMDL.
+
+  A UNIX-oid operating system (GNU/Linux, GNU/Hurd, Mac Darwin, Mac OSX)
+  or atleast a UNIX-oid environment like Cygwin for Windows.
+
+  Some common tools like GNU bash, sed, grep, cut, cat, ... usually these
+  are all available if you have a UNIX-oid environment (bash-shell) already.
+  Additionally you need Perl 5.x, under most GNU/Linux and Mac OSX this is
+  already available for you too - in case it isn't you can install it very
+  easily.  Consult your systems manuals, but under GNU/Linux open your
+  package manager and search for Perl and install it.
+    e.g. apt-get install perl  or  yum install perl
+  Under Cygwin you have to run setup.exe again to change any packages in
+  your Cygwin configuration.  On the page where it asks you for packages
+  search for perl and install the base package.
+
+  If you want the tool to compile the modified .asm files directly, you
+  have to download the updated BGL-Compiler for FS9 (BGLC_9.exe) freely
+  available on the internet and install the wine Windows API emulator under
+  GNU/Linux.
+    e.g. apt-get install wine  or  yum install wine
+
+Installation:
+  Unpack the contents of this archive into any folder you like.  Please
+  check that user privileges and the executeable flag is set under UNIX-oid
+  systems (should be ok if the files come from a .tar archive, but .zip
+  archieves destroy these flags).  If you have downloaded the BGLC_9.exe
+  unpack it and place it in the same folder as the scripts.
+
+  Now you can run this script set from the Console/Terminal Emulator by
+  cd'ing to the directory where these tools are and using it as described
+  below.
 
 Useage:
   ./fstools.sh [Option] | [Arguments]
@@ -43,3 +78,5 @@ Optional Arguments:
     ./fstools.sh "/path/to/input/folder/" "/path/to/output/folder/"
       "motherfile.asm" "brightmaterials.csv"
 
+Bugs and Contact:
+  Jakob Klein, <http://kleinjakob.at/> mail@kleinjakob.at
