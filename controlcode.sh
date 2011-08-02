@@ -73,8 +73,8 @@ function process_string {
 			name="LIGHT_LOGO_MASK"
 			;;
 		*)
-			echo "Unknown Letter '${1:0:1}'"
-			exit
+			echo "ERROR: Unknown Letter '${1:0:1}' in Light String!" >&2
+			exit 1;
 			;;
 	esac
 	
@@ -107,19 +107,19 @@ function process_string {
 # Check argument length of light string.
 if [[ ${#1} -lt 1 ]]; then
 	echo "Argument Error! Usage `basename $0` <used light string in lower case! (e.g. lpo )> <dict_lightState number> <submodel_basename> [<Dump States extra if filename is set>]"
-	exit
+	exit 1;
 fi
 
 # Check argument length of light state number.
 if [[ ${#2} -lt 1 ]]; then
 	echo "Argument Error! Usage `basename $0` <used light string in lower case! (e.g. lpo )> <dict_lightState number> <submodel_basename> [<Dump States extra if filename is set>]"
-	exit
+	exit 1;
 fi
 
 # Check argument length of submodel_basename.
 if [[ ${#3} -lt 1 ]]; then
 	echo "Argument Error! Usage `basename $0` <used light string in lower case! (e.g. lpo )> <dict_lightState number> <submodel_basename> [<Dump States extra if filename is set>]"
-	exit
+	exit 1;
 fi
 
 # Print a comment where the insert should start.
