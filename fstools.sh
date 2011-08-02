@@ -27,7 +27,7 @@ set -e
 
 # Version String for GIT Tags (git tags are in format v1.005 while for
 # presentation the version should be formated 1.5)
-VERSION="1.0"
+VERSION="1.1"
 
 inputfolder="";
 outputfolder="";
