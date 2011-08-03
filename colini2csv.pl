@@ -49,7 +49,7 @@ while (<>) {
     $last_color_number = undef;
   } 
   # If last_color_number is set interpret R G B lines.
-  elsif ($last_color_number) {
+  elsif (defined $last_color_number) {
     if ($_ =~ /^R=(\d+)/) {
       $red = $1;
     }
@@ -60,7 +60,7 @@ while (<>) {
       $blue = $1;
     }
 
-    if ($red && $green && $blue) {
+    if (defined $red && defined $green && defined $blue) {
       printf "%d\t%.6f\t%.6f\t%.6f\n", 900+$last_color_number, $red/255, $green/255, $blue/255;
       $last_color_number = undef;
       $red = undef;
