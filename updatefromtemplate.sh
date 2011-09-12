@@ -59,7 +59,9 @@ while IFS="" read controlline; do
 				*)
 					statename=$(echo "$statesline" | cut -f1)
 					if [[ $statename = $substitutionname ]]; then
-						listelements=$(echo "$statesline" | cut -f2- | sed -e "y/\t/\ /")
+						# This is a very very dirty hack, missusing the bell character BEL U+0007 "\a"
+						# as a substitution for embeded spaces which should be conserved!
+						listelements=$(echo "$statesline" | cut -f2- | sed -e "y/\t\ /\ \a/")
 			
 						istexturename=1
 						texturename=""
@@ -72,7 +74,8 @@ while IFS="" read controlline; do
 								istexturename=0
 
 								# Sets and translates lowercase name of texture to upper.
-								texturename=$(echo $item | tr "[:lower:]" "[:upper:]")
+								# Added reverse for Space to BEL hack!
+								texturename=$(echo $item | tr "[:lower:]" "[:upper:]" | sed -e "y/\a/\ /")
 					
 								if [[ ${#texturename} -gt 63 ]]; then
 									echo "ERROR! ${texturename} too long (${#texturename} of max 63 characters)."
