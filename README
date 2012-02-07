@@ -1,5 +1,5 @@
 FS Tools 1.2
-Copyright (C) 2009-2011 Jakob Klein, mail@kleinjakob.at
+Copyright (C) 2009-2012 Jakob Klein, mail@kleinjakob.at
 
 This file is part of FS Tools.
 
@@ -79,7 +79,7 @@ Optional Arguments:
       "motherfile.asm" "brightmaterials.csv"
 
 Bugs and Contact:
-  Project Homepage: <https://github.com/kleinjakob/FS-Tools>
+  Github Repository: <https://github.com/kleinjakob/FS-Tools>
   
 Author:
   Jakob Klein <http://kleinjakob.at/> mail@kleinjakob.at
