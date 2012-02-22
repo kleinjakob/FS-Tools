@@ -179,10 +179,15 @@ if [[ $numextmodels -gt 1 ]]; then
 	
 	if [[ $answer -eq 1 ]]; then
 		# Do the steps to merge the models.
+		perl -pe 's/(^\s*IFSIZEV LOD_.+,\s*\d+\s*,\s*\d+\s*)/;$1/;
+s/(^\s*IFSIZEV SHADOW_.+,\s*\d+\s*,\s*\d+\s*)/;$1/;
+s/BGL_JUMP_32\s*LOD_/BGL_CALL_32    LOD_/;
+s/^(model_inside\s*label\s*BGLCODE\s*)$/    BGL_RETURN\n$1/;
+s/^(model_crash\s*label\s*BGLCODE\s*)$/    BGL_RETURN\n$1/;' < "${tmpfolder}${motherfile}" > "${tmpfolder}${motherfile}_mod"
+		# TODO: Unchecked!  Better check for other methods of ending a LOD-sequence as well!
 		
-		# TODO: Implement External Model Merge.
-		
-		echo "WARNING!  External Model Merge is not yet implemented."
+		# Substitute original file with modified file.
+		mv "${tmpfolder}${motherfile}_mod" "${tmpfolder}${motherfile}"
 	fi
 fi
 
